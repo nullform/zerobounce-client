@@ -62,45 +62,61 @@ Or you can just override the `Client::log()` method that is called on every TGSt
 
 ## Methods
 
-### `Client::timeout( [int $timeout = null ] ) : int`
+### Client::timeout()
+
+`Client::timeout( [int $timeout = null ] ) : int`
 
 Timeout (maximum time the request is allowed to take).
 Get or set value.
 
-### `Client::caching( $cache, int $ttl [, string $prefix = '' ] ) : bool`
+### Client::caching()
+
+`Client::caching( $cache, int $ttl [, string $prefix = '' ] ) : bool`
 
 Caching of API responses.
 
 You can pass `null` to disable caching (default).
 
-### `Client::logFunction( ?callable $func ) : bool`
+### Client::logFunction()
+
+`Client::logFunction( ?callable $func ) : bool`
 
 The function for logging that will be called after every ZeroBounce API call.
 
 The function takes a client instance as a parameter.
 
-### `Client::lastRequest( void ) : Http\Request`
+### Client::lastRequest()
+
+`Client::lastRequest( void ) : Http\Request`
 
 Get last request.
 
-### `Client::lastResponse( void ) : Http\Response`
+### Client::lastResponse()
+
+`Client::lastResponse( void ) : Http\Response`
 
 Get last response.
 
-### `Client::getCredits( void ) : int`
+### Client::getCredits()
+
+`Client::getCredits( void ) : int`
 
 Get credit balance.
 If a -1 is returned, that means your API Key is invalid.
 
 [Validation API: Credit Balance](https://www.zerobounce.net/docs/email-validation-api-quickstart/v2-credit-balance/)
 
-### `Client::validate( string $email [, ?string $ip_address = null ] ) : Models\Email`
+### Client::validate()
+
+`Client::validate( string $email [, ?string $ip_address = null ] ) : Models\Email`
 
 Validate email.
 
 [Validation API: Validate Emails](https://www.zerobounce.net/docs/email-validation-api-quickstart/v2-validate-emails/)
 
-### `Client::getUsage( mixed $start_date [, mixed $end_date = 'now' ] ): Models\Usage`
+### Client::getUsage()
+
+`Client::getUsage( mixed $start_date [, mixed $end_date = 'now' ] ) : Models\Usage`
 
 Get API usage.
 
@@ -108,7 +124,9 @@ Get API usage.
 
 [Validation API: API Usage](https://www.zerobounce.net/docs/email-validation-api-quickstart/v2-get-api-usage/)
 
-### `Client::bulkSendFile( string $filename, string $type, Params\BulkSendFileParams $params ) : Models\BulkFile`
+### Client::bulkSendFile()
+
+`Client::bulkSendFile( string $filename, string $type, Params\BulkSendFileParams $params ) : Models\BulkFile`
 
 Send a csv or txt file for bulk email validation/scoring.
 
@@ -124,7 +142,9 @@ $file = $client->bulkSendFile($filename, Models\BulkFile::TYPE_VALIDATION, $para
 |
 [AI Scoring API: Send File](https://www.zerobounce.net/docs/ai-scoring-api/send-file/)
 
-### `Client::bulkFileStatus( string $file_id, string $type ) : Models\BulkFile`
+### Client::bulkFileStatus()
+
+`Client::bulkFileStatus( string $file_id, string $type ) : Models\BulkFile`
 
 Uploaded file status.
 
@@ -132,7 +152,9 @@ Uploaded file status.
 |
 [AI Scoring API: File Status](https://www.zerobounce.net/docs/ai-scoring-api/file-status/)
 
-### `Client::bulkGetFile( string $file_id, string $type [, ?string $output_filename = null ] ) : string`
+### Client::bulkGetFile()
+
+`Client::bulkGetFile( string $file_id, string $type [, ?string $output_filename = null ] ) : string`
 
 Get the validation/scoring results csv (or zip) file for the file been submitted using sendfile API.
 
@@ -140,7 +162,9 @@ Get the validation/scoring results csv (or zip) file for the file been submitted
 |
 [AI Scoring API: Get File](https://www.zerobounce.net/docs/ai-scoring-api/get-file/)
 
-### `Client::bulkDeleteFile( string $file_id, string $type ) : bool`
+### Client::bulkDeleteFile()
+
+`Client::bulkDeleteFile( string $file_id, string $type ) : bool`
 
 Delete the file that was submitted using sendfile API.
 File can be deleted only when its status is Complete.
