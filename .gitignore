@@ -1,0 +1,7 @@
+/.idea
+/*.log
+/*.csv
+/*.txt
+/*.zip
+/vendor
+/composer.lock

@@ -1,0 +1,24 @@
+{
+  "name": "nullform/zerobounce-client",
+  "description": "ZeroBounce API client",
+  "type": "library",
+  "keywords": ["zerobounce", "api", "client"],
+  "homepage": "https://github.com/nullform/zerobounce-client",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pavel Novikov"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"Nullform\\ZeroBounce\\": "src/"}
+  },
+  "require": {
+    "php": ">=7.2",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-fileinfo": "*",
+    "psr/cache": "^1.0.1",
+    "psr/simple-cache": "^1.0.1"
+  }
+}
