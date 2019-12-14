@@ -18,13 +18,9 @@ use Nullform\ZeroBounce;
 $client = new ZeroBounce\Client($api_key);
 
 try {
-
     $result = $client->validate($email);
-
 } catch (ZeroBounce\Exceptions\AbstractException $exception) {
-
     echo $exception->getMessage();
-
 }
 ```
 
@@ -58,13 +54,13 @@ $client->logFunction($log_func);
 $usage = $client->getUsage('2019-01-01');
 ```
 
-Or you can just override the `Client::log()` method that is called on every TGStat API call.
+Or you can just override the `Client::log()` method that is called on every API call.
 
 ## Methods
 
 ### Client::timeout()
 
-`Client::timeout( [int $timeout = null ] ) : int`
+`Client::timeout( [ int $timeout = null ] ) : int`
 
 Timeout (maximum time the request is allowed to take).
 Get or set value.
