@@ -522,4 +522,74 @@ class Email extends AbstractModel
     {
         return (int)strtotime($this->processed_at);
     }
+
+    /**
+     * Status description.
+     *
+     * @return string
+     * @see https://www.zerobounce.net/docs/email-validation-api-quickstart/v2-status-codes/ Validation API: Status Codes
+     */
+    public function statusDescription(): string
+    {
+        $description = '';
+
+        $statuses = [
+            static::STATUS_VALID       => 'These are emails that we determined to be valid and safe to email to, they will have a very low bounce rate of under 2%. If you receive bounces it can be because your IP might be blacklisted where our IP was not. Sometimes the email accounts exist, but they are only accepting mail from people in their contact lists. Sometimes you will get throttle on number of emails you can send to a specific domain per hour. It\'s important to look at the SMTP Bounce codes to determine why.',
+            static::STATUS_INVALID     => 'These are emails that we determined to be invalid, please delete them from your mailing list. The results are 99.999% accurate.',
+            static::STATUS_CATCH_ALL   => 'These emails are impossible to validate without sending a real email and waiting for a bounce. The term Catch-all means that the email server tells you that the email is valid, whether it\'s valid or invalid. If you want to email these addresses, I suggest you segment them into a catch-all group and know that some of these will most likely bounce.',
+            static::STATUS_SPAMTRAP    => 'These emails are believed to be spamtraps and should not be mailed. We have technology in place to determine if certain emails should be classified as spamtrap. We don\'t know all the spamtrap email addresses, but we do know a lot of them.',
+            static::STATUS_ABUSE       => 'These emails are of people who are known to click the abuse links in emails, hence abusers or complainers. We recommend not emailing these addresses.',
+            static::STATUS_DO_NOT_MAIL => 'These emails are of companies, role-based, or people you just want to avoid emailing to. They are broken down into 6 sub-categories "disposable","toxic", "role_based", "role_based_catch_all", "global_suppression" and "possible_trap". Examine this file and determine if you want to email these address. They are valid email addresses, but shouldn\'t be mailed in most cases.',
+            static::STATUS_UNKNOWN     => 'These emails we weren\'t able to validate for one reason or another. Typical cases are "Their mail server was down" or "the anti-spam system is blocking us". In most cases, 80% unknowns are invalid/bad email addresses. We have the lowest "unknowns" of any email validator, and we don\'t make this statement lightly. We paid and tested email lists at over 50 different validation companies to compare results. If you do encounter a large number of unknowns, please submit those for re-validation. Remember you are not charged for unknown results, credits will be credited back. If you still have a large number, contact us and we will take a look and verify.',
+        ];
+
+        if (isset($statuses[$this->status])) {
+            $description = $statuses[$this->status];
+        }
+
+        return $description;
+    }
+
+    /**
+     * Substatus description.
+     *
+     * @return string
+     * @see https://www.zerobounce.net/docs/email-validation-api-quickstart/v2-status-codes/ Validation API: Status Codes
+     */
+    public function subStatusDescription(): string
+    {
+        $description = '';
+
+        $sub_statuses = [
+            static::SUBSTATUS_ALIAS_ADDRESS               => 'These emails addresses act as forwarders/aliases and are not real inboxes, for example if you send an email to forward@example.com and then the email is forwarded to realinbox@example.com. It\'s a valid email address and you can send to them, it\'s just a little more information about the email address. We can sometimes detect alias email addresses and when we do we let you know.',
+            static::SUBSTATUS_ANTISPAM_SYSTEM             => 'These emails have anti-spam systems deployed that are preventing us from validating these emails. You can submit these to us through the contact us screen to look into.',
+            static::SUBSTATUS_DOES_NOT_ACCEPT_MAIL        => 'These domains only send mail and don\'t accept it.',
+            static::SUBSTATUS_EXCEPTION_OCCURRED          => 'These emails caused an exception when validating. If this happens repeatedly, please let us know.',
+            static::SUBSTATUS_FAILED_SMTP_CONNECTION      => 'These emails belong to a mail server that won\'t allow an SMTP connection. Most of the time, these emails will end up being invalid.',
+            static::SUBSTATUS_FAILED_SYNTAX_CHECK         => 'Emails that fail RFC syntax protocols.',
+            static::SUBSTATUS_FORCIBLE_DISCONNECT         => 'These emails belong to a mail server that disconnects immediately upon connecting. Most of the time, these emails will end up being invalid.',
+            static::SUBSTATUS_GLOBAL_SUPPRESSION          => 'These emails are found in many popular global suppression lists (GSL), they consist of known ISP complainers, direct complainers, purchased addresses, domains that don\'t send mail, and known litigators.',
+            static::SUBSTATUS_GREYLISTED                  => 'Emails where we are temporarily unable to validate them. A lot of times if you resubmit these emails they will validate on a second pass.',
+            static::SUBSTATUS_LEADING_PERIOD_REMOVED      => 'If a valid gmail.com email address starts with a period ' . ' we will remove it, so the email address is compatible with all mailing systems.',
+            static::SUBSTATUS_MAIL_SERVER_DID_NOT_RESPOND => 'These emails belong to a mail server that is not responding to mail commands. Most of the time, these emails will end up being invalid.',
+            static::SUBSTATUS_MAIL_SERVER_TEMPORARY_ERROR => 'These emails belong to a mail server that is returning a temporary error. Most of the time, these emails will end up being invalid.',
+            static::SUBSTATUS_MAILBOX_QUOTA_EXCEEDED      => 'These emails exceeded their space quota and are not accepting emails. These emails are marked invalid.',
+            static::SUBSTATUS_MAILBOX_NOT_FOUND           => 'These emails addresses are valid in syntax, but do not exist. These emails are marked invalid.',
+            static::SUBSTATUS_NO_DNS_ENTRIES              => 'These emails are valid in syntax, but the domain doesn\'t have any records in DNS or have incomplete DNS Records. Therefore, mail programs will be unable to or have difficulty sending to them. These emails are marked invalid.',
+            static::SUBSTATUS_POSSIBLE_TRAP               => 'These emails contain keywords that might correlate to possible spam traps like spam@ or @spamtrap.com. Examine these before deciding to send emails to them or not.',
+            static::SUBSTATUS_POSSIBLE_TYPO               => 'These are emails of commonly misspelled popular domains. These emails are marked invalid.',
+            static::SUBSTATUS_ROLE_BASED                  => 'These emails belong to a position or a group of people, like sales@ info@ and contact@. Role-based emails have a strong correlation to people reporting mails sent to them as spam and abuse.',
+            static::SUBSTATUS_TIMEOUT_EXCEEDED            => 'These emails belong to a mail server that is responding extremely slow. Most of the time, these emails will end up being invalid.',
+            static::SUBSTATUS_UNROUTABLE_IP_ADDRESS       => 'These emails domains point to an un-routable IP address, these are marked invalid.',
+            static::SUBSTATUS_DISPOSABLE                  => 'These are temporary emails created for the sole purpose to sign up to websites without giving their real email address. These emails are short lived from 15 minutes to around 6 months. There is only 2 values (True and False). If you have valid emails with this flag set to TRUE, you shouldn\'t email them.',
+            static::SUBSTATUS_TOXIC                       => 'These email addresses are known to be abuse, spam, or bot created emails. If you have valid emails with this flag set to TRUE, you shouldn\'t email them.',
+            static::SUBSTATUS_ROLE_BASED_CATCH_ALL        => 'These emails are role-based and also belong to a catch_all domain.',
+        ];
+
+        if (isset($sub_statuses[$this->sub_status])) {
+            $description = $sub_statuses[$this->sub_status];
+        }
+
+        return $description;
+    }
 }
