@@ -515,7 +515,7 @@ class Client
             $path = 'scoring/deletefile';
         }
 
-        $response = $this->call('GET', $this->bulkApiBaseUrl(), $path, $params);
+        $response = $this->call('POST', $this->bulkApiBaseUrl(), $path, $params);
 
         $payload = $response->getPayload();
 
@@ -576,7 +576,7 @@ class Client
 
         $cache_key = $this->cache_prefix . $this->request->hash();
 
-        if (!is_null($this->cache)) {
+        if (!is_null($this->cache) && $this->request->method === 'GET') {
             $cached_response = $this->getResponseFromCache($cache_key);
             if (!empty($cached_response) && $cached_response instanceof Response) {
                 // Get response from cache
